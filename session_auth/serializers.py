@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
-    password = serializers.CharField(style={'input_style': 'password'})
+    password = serializers.CharField(required=True)
 
     def validate(self, attrs):
         username = attrs['username']

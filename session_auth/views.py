@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import render
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
@@ -9,9 +9,15 @@ from rest_framework.views import APIView
 from session_auth.serializers import LoginSerializer, UserSerializer
 
 
-@api_view(['GET'])
-def me(request):
-    return Response('YOU')
+@api_view(['POST'])
+def me_view(request):
+    return Response(UserSerializer(request.user).data)
+
+
+@api_view(['DELETE'])
+def logout_view(request):
+    logout(request.user)
+    return Response()
 
 
 class LoginView(APIView):
@@ -25,7 +31,3 @@ class LoginView(APIView):
         login(self.request, user)
         return Response(UserSerializer(serializer.validated_data).data)
 
-
-@api_view(['DELETE'])
-def logout(request):
-    return Response('LOGOUT')

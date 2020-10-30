@@ -4,7 +4,7 @@ from chats.models import *
 from session_auth.serializers import UserSerializer
 
 
-class MessageListSerializer(serializers.ModelSerializer):
+class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer()
 
     class Meta:
@@ -12,8 +12,23 @@ class MessageListSerializer(serializers.ModelSerializer):
         exclude = ('chat',)
 
 
+class MessageEditSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        user = self.context['request'].user
+        chat = validated_data.get('chat')
+        try:
+            Chat.objects.get(id=chat.id, members__in=[user])
+        except Chat.DoesNotExist:
+            raise serializers.ValidationError('У вас нет доступа к этому чату')
+        return Message.objects.create(sender=user, **validated_data)
+
+    class Meta:
+        model = Message
+        fields = ('text', 'chat')
+
+
 class ChatRetrieveSerializer(serializers.ModelSerializer):
-    messages = MessageListSerializer(many=True)
+    messages = MessageSerializer(many=True)
     members = UserSerializer(many=True)
 
     class Meta:

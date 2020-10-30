@@ -1,10 +1,27 @@
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework import mixins
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from chats.models import Chat
-from chats.serializers import ChatRetrieveSerializer, ChatListSerializer, ChatEditSerializer
+from chats.models import Chat, Message
+from chats.serializers import ChatRetrieveSerializer, ChatListSerializer, ChatEditSerializer, MessageEditSerializer, \
+    MessageSerializer
+
+
+class MessagesView(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
+    serializer_class = MessageEditSerializer
+
+    def get_serializer_context(self):
+        context = super(MessagesView, self).get_serializer_context()
+        context.update({'request': self.request})
+        return context
+
+    def get_queryset(self):
+        user = self.request.user
+        return Message.objects.filter(sender=user)
 
 
 class ChatsViewSet(ModelViewSet):

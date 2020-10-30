@@ -9,14 +9,14 @@ from rest_framework.views import APIView
 from session_auth.serializers import LoginSerializer, UserSerializer
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def me_view(request):
     return Response(UserSerializer(request.user).data)
 
 
 @api_view(['DELETE'])
 def logout_view(request):
-    logout(request.user)
+    logout(request)
     return Response()
 
 

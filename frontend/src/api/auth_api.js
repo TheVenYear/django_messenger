@@ -2,13 +2,13 @@ import instance, {packResponse} from './instance';
 
 const authAPI = {
   me: () => (
-    packResponse(instance.get('me/'))
+    packResponse(instance.get('auth/me/'))
   ),
   login: (data) => (
-    packResponse(instance.post('login/', data))
+    packResponse(instance.post('auth/login/', data))
   ),
   logout: () => (
-    packResponse(instance.delete('logout/'))
+    packResponse(instance.delete('auth/logout/'))
   )
 }
 

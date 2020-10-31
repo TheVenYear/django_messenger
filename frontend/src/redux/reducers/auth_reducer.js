@@ -31,6 +31,7 @@ export const login = data => dispatch => {
       dispatch(setUserAC(response.data));
     }
     else if (response.status === 400) {
+      console.log(response);
       dispatch(stopSubmit('login', {
         _error: response.data['non_field_errors'],
         username: response.data.username,

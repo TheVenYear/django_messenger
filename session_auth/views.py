@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 
+from django_messenger.utils import ApiRenderer
 from session_auth.serializers import LoginSerializer, UserSerializer
 
 

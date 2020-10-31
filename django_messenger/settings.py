@@ -46,7 +46,13 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'django_messenger.utils.ApiRenderer',
+    # ),
+
+    'EXCEPTION_HANDLER': 'django_messenger.utils.custom_exception_handler'
 }
 
 MIDDLEWARE = [
@@ -57,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_messenger.utils.ResponseCustomMiddleware'
 ]
 
 ROOT_URLCONF = 'django_messenger.urls'

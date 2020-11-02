@@ -28,10 +28,11 @@ class ApiRenderer(JSONRenderer):
         if renderer_context is not None:
             response['status_code'] = renderer_context['response'].status_code
 
-            if 'context' in renderer_context['response'].data:
-                response['messages'] = renderer_context['response'].data['context']['messages']
+            try:
+                context = renderer_context['response'].data['context']
+                response['messages'] = context['messages']
                 renderer_context['response'].status_code = 200
-            else:
+            except:
                 response['data'] = data
 
         return super(ApiRenderer, self).render(response, accepted_media_type, renderer_context)

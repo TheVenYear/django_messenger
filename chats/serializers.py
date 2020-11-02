@@ -45,6 +45,13 @@ class ChatListSerializer(serializers.ModelSerializer):
 
 
 class ChatEditSerializer(serializers.ModelSerializer):
+    def validate_members(self, attrs):
+        user = self.context['user']
+        if user not in attrs:
+            attrs.append(user)
+
+        return attrs
+
     class Meta:
         model = Chat
         exclude = ('date',)

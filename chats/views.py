@@ -33,6 +33,11 @@ class ChatsViewSet(ModelViewSet):
         user = self.request.user
         return Chat.objects.filter(members__in=[user])
 
+    def get_serializer_context(self):
+        context = super(ChatsViewSet, self).get_serializer_context()
+        context.update({'user': self.request.user})
+        return context
+
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return ChatRetrieveSerializer

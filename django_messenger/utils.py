@@ -12,7 +12,7 @@ def custom_exception_handler(exc, context):
     response = None
     # Now add the HTTP status code to the response.
     if base_response is not None:
-        response = Response(data={'context': {'messages': base_response.data}}, status=base_response.status_code)
+        response = Response(data={'__context': {'messages': base_response.data}}, status=base_response.status_code)
 
     return response
 
@@ -20,19 +20,18 @@ def custom_exception_handler(exc, context):
 class ApiRenderer(JSONRenderer):
     def render(self, data, accepted_media_type=None, renderer_context=None):
         response = {
-            'messages': [],
+            'messages': None,
             'data': None,
             'status_code': None
         }
 
         if renderer_context is not None:
             response['status_code'] = renderer_context['response'].status_code
-
             try:
-                context = renderer_context['response'].data['context']
+                context = renderer_context['response'].data['__context']
                 response['messages'] = context['messages']
                 renderer_context['response'].status_code = 200
-            except:
+            except (TypeError, KeyError):
                 response['data'] = data
 
         return super(ApiRenderer, self).render(response, accepted_media_type, renderer_context)

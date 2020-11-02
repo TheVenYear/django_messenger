@@ -7,6 +7,7 @@ DELETED_USER = 1
 class Chat(Model):
     name = CharField(max_length=300, verbose_name='название')
     members = ManyToManyField(User, related_name='chats', verbose_name='участники')
+    picture = ImageField(upload_to='chat_pictures', verbose_name='изображение', null=True)
     date = DateTimeField(auto_now_add=True, verbose_name='дата создания')
 
     def __str__(self):

@@ -41,7 +41,7 @@ class ChatListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chat
-        fields = ('id', 'name', 'members')
+        fields = '__all__'
 
 
 class ChatEditSerializer(serializers.ModelSerializer):

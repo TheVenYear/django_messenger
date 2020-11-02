@@ -16,7 +16,7 @@ class MessageInlineAdmin(admin.TabularInline):
 
 class ChatAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'date')
-    fields = ('name', 'members')
+    fields = ('name', 'picture', 'members')
     inlines = (MessageInlineAdmin,)
 
 

@@ -12,35 +12,26 @@ def custom_exception_handler(exc, context):
     response = None
     # Now add the HTTP status code to the response.
     if base_response is not None:
-        response = Response({'data': None, 'messages': base_response.data})
-        response['messages'] = base_response.data
+        response = Response(data={'context': {'messages': base_response.data}}, status=base_response.status_code)
 
     return response
 
 
 class ApiRenderer(JSONRenderer):
-
     def render(self, data, accepted_media_type=None, renderer_context=None):
         response = {
-            'error': False,
-            'message': 'Success',
-            'data': data
+            'messages': [],
+            'data': None,
+            'status_code': None
         }
 
+        if renderer_context is not None:
+            response['status_code'] = renderer_context['response'].status_code
+
+            if 'context' in renderer_context['response'].data:
+                response['messages'] = renderer_context['response'].data['context']['messages']
+                renderer_context['response'].status_code = 200
+            else:
+                response['data'] = data
+
         return super(ApiRenderer, self).render(response, accepted_media_type, renderer_context)
-
-
-class ResponseCustomMiddleware(MiddlewareMixin):
-    def __init__(self, *args, **kwargs):
-        super(ResponseCustomMiddleware, self).__init__(*args, **kwargs)
-
-    def process_template_response(self, request, response):
-        if not response.is_rendered and isinstance(response, Response):
-            if isinstance(response.data, dict):
-                message = response.data.get('messages', None)
-                if 'data' not in response.data:
-                    response.data = {'data': response.data}
-                response.data.setdefault('messages', message)
-
-                response.data.setdefault('status_code', response.status_code)
-        return response

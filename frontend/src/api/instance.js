@@ -13,10 +13,7 @@ instance.interceptors.request.use((request) => {
 });
 
 export const packResponse = (promise) => (
-  promise.then(response => ({
-    data: response.data,
-    status: response.status
-  }))
+  promise.then(response => (response.data))
 );
 
 export default instance;

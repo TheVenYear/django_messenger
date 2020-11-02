@@ -1,15 +1,17 @@
 import React from 'react';
 import LoginFormContainer from '../LoginForm/LoginFormContainer';
+import {connect} from 'react-redux';
 
-const App = () => {
+const App = ({user}) => {
   return (
     <div className="App">
-      <header>
-        Hello world
-      </header>
       <LoginFormContainer/>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  user: state.auth.user
+})
+
+export default connect(mapStateToProps, {})(App);
